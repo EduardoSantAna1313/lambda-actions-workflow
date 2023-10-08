@@ -52,7 +52,7 @@ jobs:
         run: |
           ls
           echo "aws s3 cp $LAMBDA_NAME.zip $BUCKET_CODE/$LAMBDA_NAME.zip"
-          aws s3 cp $LAMBDA_NAME.zip $BUCKET_CODE/$LAMBDA_NAME.zip
+          aws s3 cp $LAMBDA_NAME.zip s3://$BUCKET_CODE/$LAMBDA_NAME.zip
 
       # Terraform
       - name: Setup Terraform
