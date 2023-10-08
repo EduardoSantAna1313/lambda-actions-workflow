@@ -35,7 +35,14 @@ jobs:
       # Package the code as zip
       - name: Packing
         working-directory: app
-        run: scripts/zip.sh
+        run: |
+          mkdir temp_zip
+          cp -r dist/* temp_zip/
+          cp -r node_modules temp_zip/
+          cd temp_zip
+          zip -r ../dist.zip ./
+          cd ..
+          rm -rf temp_zip
       
       # AWS Config
       - name: Configure AWS credentials
