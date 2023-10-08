@@ -68,7 +68,7 @@ jobs:
       # Upload Atifacts 
       - name: Upload Lambda package to S3
         run: |
-          echo ${{  .build.outputs.lambda_name }}
+          echo ${{  needs.build.outputs.lambda_name }}
           aws s3 cp $LAMBDA_NAME.zip s3://$BUCKET_CODE/$LAMBDA_NAME.zip
 
       # Terraform
