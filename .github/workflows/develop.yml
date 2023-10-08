@@ -44,11 +44,12 @@ jobs:
           FILE_NAME="$LAMBDA_NAME-$HASH"
           mv $LAMBDA_NAME.zip $FILE_NAME.zip
           echo "Renamed file to $FILE_NAME"
+          echo "LAMBDA_NAME=$FILE_NAME" >> $GITHUB_ENV
           echo "lambda_name=$FILE_NAME" >> $GITHUB_OUTPUT
 
       - run: |
           mkdir artifacts
-          cp artifacts/$FILE_NAME.zip
+          cp artifacts/$LAMBDA_NAME.zip
 
       - uses: actions/upload-artifact@master
         with:
