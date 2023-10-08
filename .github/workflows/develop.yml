@@ -44,8 +44,7 @@ jobs:
           FILE_NAME="$LAMBDA_NAME-$HASH"
           mv $LAMBDA_NAME.zip $FILE_NAME.zip
           echo "Renamed file to $LAMBDA_NAME"
-          echo "LAMBDA_NAME=$FILE_NAME" >> $GITHUB_ENV
-          echo "::set-output name=lambda_name::${LAMBDA_NAME}"
+          echo "lambda_name=$FILE_NAME" >> $GITHUB_OUTPUT
     outputs:
       lambda_name: ${{ steps.ziping.lambda_name }}
         
