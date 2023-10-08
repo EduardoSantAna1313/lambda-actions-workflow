@@ -1,5 +1,3 @@
-cd ../infra
-
 echo "Terraform init"
 
 terraform init
@@ -11,3 +9,5 @@ terraform validate
 echo "Terraform apply"
 
 terraform apply
+
+cd ..

@@ -1,5 +1,3 @@
-cd ..
-
 printf "\n\n### Creating HASH ###\n\n"
 
 HASH=$(md5sum $LAMBDA_NAME.zip | awk '{print $1}')
