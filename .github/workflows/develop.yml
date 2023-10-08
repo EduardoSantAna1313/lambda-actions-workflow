@@ -40,8 +40,8 @@ jobs:
           zip -r ../$LAMBDA_NAME.zip . *
           cd ..
           HASH=$(md5sum $LAMBDA_NAME.zip | awk '{print $1}')
-          FILE_NAME="$LAMBDA_NAME-$HASH.zip"
-          mv $LAMBDA_NAME.zip $FILE_NAME
+          FILE_NAME="$LAMBDA_NAME-$HASH"
+          mv $LAMBDA_NAME.zip $FILE_NAME.zip
           echo "Renamed file to $LAMBDA_NAME"
           echo "LAMBDA_NAME=$FILE_NAME" >> $GITHUB_ENV
         
