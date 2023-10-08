@@ -63,6 +63,9 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
 
+      - name: Set Terraform Log Level
+        run: echo "TF_LOG=DEBUG" >> $GITHUB_ENV
+
       - name: Terraform Init
         working-directory: infra
         run: |
@@ -82,11 +85,8 @@ jobs:
             -var "aws_region=$AWS_REGION"
 
       - name: Terraform Apply
-        working-directory: infra
-        env:
-          TF_LOG: DEBUG
         run: |
-          terraform apply -auto-approve \
+          terraform -chdir=infra apply -auto-approve \
             -var-file=terraform.tfvars \
             -var "code_key=$LAMBDA_NAME.zip" \
             -var "bucket_source_code=$BUCKET_CODE"
