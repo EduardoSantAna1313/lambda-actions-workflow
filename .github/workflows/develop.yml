@@ -83,11 +83,15 @@ jobs:
 
       - name: Terraform Apply
         working-directory: infra
+        env:
+          TF_LOG: DEBUG
         run: |
           terraform apply -auto-approve \
             -var-file=terraform.tfvars \
             -var "code_key=$LAMBDA_NAME.zip" \
             -var "bucket_source_code=$BUCKET_CODE"
+            -var "aws_account_id=$AWS_ACCOUNT_ID" \
+            -var "aws_region=$AWS_REGION"
 
       - name: Cleanup
         working-directory: app
