@@ -39,12 +39,12 @@ jobs:
         run: |
           zip -r ../$LAMBDA_NAME.zip . *
           cd ..
-          ls
           HASH=$(md5sum $LAMBDA_NAME.zip | awk '{print $1}')
           FILE_NAME="$LAMBDA_NAME-$HASH.zip"
           mv $LAMBDA_NAME.zip $FILE_NAME
-          ls
-          echo $FILE_NAME >> $LAMBDA_NAME
+          echo "Renamed file to $LAMBDA_NAME"
+          echo "LAMBDA_NAME=$FILE_NAME" >> $GITHUB_ENV
+        
       
       # AWS Config
       - name: Configure AWS credentials
