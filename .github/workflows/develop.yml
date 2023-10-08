@@ -71,9 +71,8 @@ jobs:
             backend "s3" {
             }
           }
-          line 2
           EOT
-          ls
+
           cat backend.tf
 
       - name: Terraform Init
