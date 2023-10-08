@@ -62,13 +62,21 @@ jobs:
       # Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
+      
+      - name: Terraform set backend
+        working-directory: infra
+        run: |
+          echo "terraform {backend "s3" {}}" > backend.tf
+          ls
+          cat backend.tf
 
       - name: Terraform Init
         working-directory: infra
         run: |
           terraform init \
+             -backend=true \
             -backend-config="bucket=$BUCKET_STATE" \
-            -backend-config="key=terraform.tfstate" \
+            -backend-config="key=lambda-actions-workflow/terraform.tfstate" \
             -backend-config="region=$AWS_REGION" 
 
       - name: Terraform Plan
@@ -85,16 +93,12 @@ jobs:
         run: echo "TF_LOG=INFO" >> $GITHUB_ENV
 
       - name: Terraform Apply
+        working-directory: infra
         run: |
-          terraform -chdir=infra apply -auto-approve \
+          terraform apply -auto-approve \
             -var-file=terraform.tfvars \
             -var "code_key=$LAMBDA_NAME.zip" \
             -var "bucket_source_code=$BUCKET_CODE" \
             -var "aws_account_id=$AWS_ACCOUNT_ID" \
             -var "aws_region=$AWS_REGION"
-
-      - name: Cleanup
-        working-directory: app
-        run: rm $LAMBDA_NAME.zip
-
 
