@@ -38,6 +38,7 @@ jobs:
         working-directory: app
         run: |
           zip -r ../$LAMBDA_NAME.zip . *
+          cd ..
           ls
           HASH=$(md5sum $LAMBDA_NAME.zip | awk '{print $1}')
           FILE_NAME="$LAMBDA_NAME-$HASH.zip"
