@@ -34,7 +34,8 @@ jobs:
         run: npm install --frozen-lockfile
 
       # Package the code as zip
-      - name: Packing
+      - name: Ziping
+        id: ziping
         working-directory: app
         run: |
           zip -r ../$LAMBDA_NAME.zip . *
@@ -44,9 +45,15 @@ jobs:
           mv $LAMBDA_NAME.zip $FILE_NAME.zip
           echo "Renamed file to $LAMBDA_NAME"
           echo "LAMBDA_NAME=$FILE_NAME" >> $GITHUB_ENV
+          echo "::set-output name=lambda_name::${LAMBDA_NAME}"
+    outputs:
+      lambda_name: ${{ steps.ziping.lambda_name }}
         
   terraform:
     runs-on: ubuntu-latest
+    needs: build
+    env:
+      LAMBDA_NAME: ${{ needs.build.outputs.lambda_name }}
 
     steps:
       - uses: actions/checkout@v3
