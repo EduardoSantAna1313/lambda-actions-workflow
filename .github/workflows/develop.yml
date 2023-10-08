@@ -13,6 +13,7 @@ env:
   AWS_REGION: sa-east-1
   LAMBDA_NAME: lambda
   BUCKET_CODE: bucket-cache-artifacts
+  BUCKET_STATE: terraform-states-329158668427
 
 jobs:
 
@@ -38,6 +39,11 @@ jobs:
         run: |
           zip -r ../$LAMBDA_NAME.zip . *
           ls
+          HASH=$(md5sum $LAMBDA_NAME.zip | awk '{print $1}')
+          FILE_NAME="$LAMBDA_NAME-$HASH.zip"
+          mv $LAMBDA_NAME.zip $FILE_NAME
+          ls
+          echo $FILE_NAME >> $LAMBDA_NAME
       
       # AWS Config
       - name: Configure AWS credentials
@@ -50,8 +56,6 @@ jobs:
       # Upload Atifacts 
       - name: Upload Lambda package to S3
         run: |
-          ls
-          echo "aws s3 cp $LAMBDA_NAME.zip $BUCKET_CODE/$LAMBDA_NAME.zip"
           aws s3 cp $LAMBDA_NAME.zip s3://$BUCKET_CODE/$LAMBDA_NAME.zip
 
       # Terraform
@@ -59,18 +63,25 @@ jobs:
         uses: hashicorp/setup-terraform@v1
 
       - name: Terraform Init
-        run: terraform -chdir=infra init -backend-config="key=${{ steps.determine-key.outputs.tf_key }}"
-
-      - name: Terraform Plan
         run: |
-          terraform -chdir=infra plan -var-file=terraform.tfvars
+          terraform init -migrate-state \
+            -backend-config="bucket=$BUCKET_STATE" \
+            -backend-config="key=terraform.tfstate" \
+            -backend-config="region=$AWS_REGION" 
+
+      #- name: Terraform Plan
+      #  run: |
+      #    terraform -chdir=infra plan -var-file=terraform.tfvars
 
       - name: Terraform Apply
         run: |
-          terraform -chdir=infra apply -auto-approve -var-file=terraform.tfvars -var "code_key=$LAMBDA_NAME.zip" -var "bucket_source_code=$BUCKET_CODE"
+          terraform -chdir=infra apply -auto-approve \
+            -var-file=terraform.tfvars \
+            -var "code_key=$LAMBDA_NAME.zip" \
+            -var "bucket_source_code=$BUCKET_CODE"
 
       - name: Cleanup
         working-directory: app
-        run: rm dist.zip
+        run: rm $LAMBDA_NAME.zip
 
 
