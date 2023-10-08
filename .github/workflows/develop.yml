@@ -45,6 +45,14 @@ jobs:
           mv $LAMBDA_NAME.zip $FILE_NAME.zip
           echo "Renamed file to $LAMBDA_NAME"
           echo "lambda_name=$FILE_NAME" >> $GITHUB_OUTPUT
+
+      - run: mkdir artifacts
+
+      - uses: actions/upload-artifact@master
+        with:
+          name: $LAMBDA_NAME.zip
+          path: artifacts
+
     outputs:
       lambda_name: ${{ steps.ziping.outputs.lambda_name }}
         
@@ -56,6 +64,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      - uses: actions/download-artifact@master
+        with:
+          name: $LAMBDA_NAME.zip
+          path: artifacts
 
       # AWS Config
       - name: Configure AWS credentials
@@ -69,7 +82,7 @@ jobs:
       - name: Upload Lambda package to S3
         run: |
           echo ${{  needs.build.outputs.lambda_name }}
-          aws s3 cp $LAMBDA_NAME.zip s3://$BUCKET_CODE/$LAMBDA_NAME.zip
+          aws s3 cp artifacts/$LAMBDA_NAME.zip s3://$BUCKET_CODE/$LAMBDA_NAME.zip
 
       # Terraform
       - name: Setup Terraform
