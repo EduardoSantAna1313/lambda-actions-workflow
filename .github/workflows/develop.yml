@@ -46,7 +46,7 @@ jobs:
           echo "Renamed file to $LAMBDA_NAME"
           echo "lambda_name=$FILE_NAME" >> $GITHUB_OUTPUT
     outputs:
-      lambda_name: ${{ steps.ziping.lambda_name }}
+      lambda_name: ${{ steps.ziping.outputs.lambda_name }}
         
   terraform:
     runs-on: ubuntu-latest
@@ -68,6 +68,7 @@ jobs:
       # Upload Atifacts 
       - name: Upload Lambda package to S3
         run: |
+          echo ${{  .build.outputs.lambda_name }}
           aws s3 cp $LAMBDA_NAME.zip s3://$BUCKET_CODE/$LAMBDA_NAME.zip
 
       # Terraform
