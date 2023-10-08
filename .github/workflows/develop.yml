@@ -65,14 +65,15 @@ jobs:
 
       - name: Terraform Init
         run: |
-          terraform init -migrate-state \
+          terraform init \
             -backend-config="bucket=$BUCKET_STATE" \
             -backend-config="key=terraform.tfstate" \
             -backend-config="region=$AWS_REGION" 
 
-      #- name: Terraform Plan
-      #  run: |
-      #    terraform -chdir=infra plan -var-file=terraform.tfvars
+      - name: Terraform Plan
+        run: |
+          terraform -chdir=infra plan \
+            -var-file=terraform.tfvars
 
       - name: Terraform Apply
         run: |
