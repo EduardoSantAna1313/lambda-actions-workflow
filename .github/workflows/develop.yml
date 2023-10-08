@@ -49,7 +49,7 @@ jobs:
 
       - run: |
           mkdir artifacts
-          cp artifacts/$LAMBDA_NAME.zip
+          cp $LAMBDA_NAME.zip artifacts/
 
       - uses: actions/upload-artifact@master
         with:
