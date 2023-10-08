@@ -21,7 +21,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-      
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -75,7 +74,9 @@ jobs:
         working-directory: infra
         run: |
           terraform plan \
-            -var-file=terraform.tfvars
+            -var-file=terraform.tfvars \
+            -var "code_key=$LAMBDA_NAME.zip" \
+            -var "bucket_source_code=$BUCKET_CODE"
 
       - name: Terraform Apply
         working-directory: infra
