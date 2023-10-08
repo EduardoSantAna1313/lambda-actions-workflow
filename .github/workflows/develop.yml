@@ -45,7 +45,12 @@ jobs:
           echo "Renamed file to $LAMBDA_NAME"
           echo "LAMBDA_NAME=$FILE_NAME" >> $GITHUB_ENV
         
-      
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
       # AWS Config
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
