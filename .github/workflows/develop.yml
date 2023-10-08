@@ -36,15 +36,7 @@ jobs:
       - name: Packing
         working-directory: app
         run: |
-          echo "ls"
-          ls
-          echo "criando temp dir"
-          mkdir temp_zip
-          cp -r . temp_zip/
-          cd temp_zip
-          zip -r ../dist.zip ./
-          cd ..
-          rm -rf temp_zip
+          zip -r ../$LAMBDA_NAME.zip . *
       
       # AWS Config
       - name: Configure AWS credentials
@@ -57,7 +49,7 @@ jobs:
       # Upload Atifacts 
       - name: Upload Lambda package to S3
         run: |
-          aws s3 cp app/dist.zip $BUCKET_CODE/dist.zip
+          aws s3 cp $LAMBDA_NAME.zip $BUCKET_CODE/$LAMBDA_NAME.zip
 
       # Terraform
       - name: Setup Terraform
@@ -72,7 +64,7 @@ jobs:
 
       - name: Terraform Apply
         run: |
-          terraform -chdir=infra apply -auto-approve -var-file=terraform.tfvars
+          terraform -chdir=infra apply -auto-approve -var-file=terraform.tfvars -var "code_key=$LAMBDA_NAME.zip" -var "bucket_source_code=$BUCKET_CODE"
 
       - name: Cleanup
         working-directory: app
