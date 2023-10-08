@@ -43,10 +43,12 @@ jobs:
           HASH=$(md5sum $LAMBDA_NAME.zip | awk '{print $1}')
           FILE_NAME="$LAMBDA_NAME-$HASH"
           mv $LAMBDA_NAME.zip $FILE_NAME.zip
-          echo "Renamed file to $LAMBDA_NAME"
+          echo "Renamed file to $FILE_NAME"
           echo "lambda_name=$FILE_NAME" >> $GITHUB_OUTPUT
 
-      - run: mkdir artifacts
+      - run: |
+          mkdir artifacts
+          cp artifacts/$FILE_NAME.zip
 
       - uses: actions/upload-artifact@master
         with:
