@@ -36,9 +36,11 @@ jobs:
       - name: Packing
         working-directory: app
         run: |
+          echo "ls"
+          ls
+          echo "criando temp dir"
           mkdir temp_zip
-          cp -r dist/* temp_zip/
-          cp -r node_modules temp_zip/
+          cp -r . temp_zip/
           cd temp_zip
           zip -r ../dist.zip ./
           cd ..
