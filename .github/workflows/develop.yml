@@ -64,6 +64,7 @@ jobs:
         uses: hashicorp/setup-terraform@v1
 
       - name: Terraform Init
+        working-directory: infra
         run: |
           terraform init \
             -backend-config="bucket=$BUCKET_STATE" \
@@ -71,13 +72,15 @@ jobs:
             -backend-config="region=$AWS_REGION" 
 
       - name: Terraform Plan
+        working-directory: infra
         run: |
-          terraform -chdir=infra plan \
+          terraform plan \
             -var-file=terraform.tfvars
 
       - name: Terraform Apply
+        working-directory: infra
         run: |
-          terraform -chdir=infra apply -auto-approve \
+          terraform apply -auto-approve \
             -var-file=terraform.tfvars \
             -var "code_key=$LAMBDA_NAME.zip" \
             -var "bucket_source_code=$BUCKET_CODE"
