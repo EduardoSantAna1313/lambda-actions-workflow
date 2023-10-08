@@ -37,6 +37,7 @@ jobs:
         working-directory: app
         run: |
           zip -r ../$LAMBDA_NAME.zip . *
+          ls
       
       # AWS Config
       - name: Configure AWS credentials
@@ -49,6 +50,8 @@ jobs:
       # Upload Atifacts 
       - name: Upload Lambda package to S3
         run: |
+          ls
+          echo "aws s3 cp $LAMBDA_NAME.zip $BUCKET_CODE/$LAMBDA_NAME.zip"
           aws s3 cp $LAMBDA_NAME.zip $BUCKET_CODE/$LAMBDA_NAME.zip
 
       # Terraform
