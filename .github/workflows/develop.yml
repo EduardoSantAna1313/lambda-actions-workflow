@@ -35,8 +35,8 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
-          role-to-assume: ${{ env.AWS_ASSUME_ROLE }}
-          aws-region: arn:aws:iam::$AWS_ACCOUNT_ID:role/${{ env.AWS_REGION }}
+          role-to-assume: arn:aws:iam::$AWS_ACCOUNT_ID:role/${{ env.AWS_ASSUME_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
           role-session-name: $LAMBDA_NAME-role-session
 
       # NPM INstall
