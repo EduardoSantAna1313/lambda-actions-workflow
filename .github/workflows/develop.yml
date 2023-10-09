@@ -35,9 +35,8 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
-          role-to-assume: arn:aws:iam::$AWS_ACCOUNT_ID:role/${{ env.AWS_ASSUME_ROLE }}
+          role-to-assume: arn:aws:iam::329158668427:role/github_action_workflows_role
           aws-region: ${{ env.AWS_REGION }}
-          role-session-name: $LAMBDA_NAME-role-session
 
       - name:  Test list lambda functions
         run: |
