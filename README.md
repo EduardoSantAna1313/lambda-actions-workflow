@@ -19,9 +19,7 @@ A pipeline possui as seguintes variaveis de ambiente:
 
 -  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
 -  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
--  AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}
 -  AWS_REGION: ${{ vars.AWS_REGION }}
--  LAMBDA_NAME: lambda
 -  BUCKET_CODE: ${{ vars.BUCKET_CODE }}
 -  BUCKET_STATE: ${{ vars.BUCKET_STATE }}
 
