@@ -22,13 +22,13 @@ resource "aws_iam_policy" "this" {
           "logs:PutLogEvents"
       ],
       "Resource": [
-          "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.this.aws_account_id}:log-group:/aws/lambda/${var.function_name}:*"
+          "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.this.account_id}:log-group:/aws/lambda/${var.function_name}:*"
       ]
   },
   {
     "Effect": "Allow",
     "Action": "logs:CreateLogGroup",
-    "Resource": "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.this.aws_account_id}:*"
+    "Resource": "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.this.account_id}:*"
     }
 ]
 }

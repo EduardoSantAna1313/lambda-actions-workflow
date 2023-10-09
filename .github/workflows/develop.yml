@@ -11,8 +11,6 @@ permissions:
 
 env:
   LAMBDA_NAME: lambda
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: ${{ vars.AWS_REGION }}
   BUCKET_CODE: ${{ vars.BUCKET_CODE }}
   BUCKET_STATE: ${{ vars.BUCKET_STATE }}
@@ -30,18 +28,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "16.x"
-
-      # Teste configure credentials
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v3
-        with:
-          role-to-assume: ${{ env.AWS_ASSUME_ROLE }}
-          aws-region: ${{ env.AWS_REGION }}
-          role-session-name: github_aws_oidc
-
-      - name:  Test list lambda functions
-        run: |
-          aws lambda list-functions
 
       # NPM INstall
       - name: Install all dependencies
@@ -88,13 +74,13 @@ jobs:
           name: $LAMBDA_NAME.zip
           path: artifacts
 
-      # AWS Config
-      #- name: Configure AWS credentials
-      #  uses: aws-actions/configure-aws-credentials@v1
-      #  with:
-      #    aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-      #    aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-      #    aws-region: ${{ env.AWS_REGION }}
+      # Configure aws credentials with assumerole
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: ${{ env.AWS_ASSUME_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+          role-session-name: github_actions_oidc_role
 
       # Upload Atifacts 
       - name: Upload Lambda package to S3
