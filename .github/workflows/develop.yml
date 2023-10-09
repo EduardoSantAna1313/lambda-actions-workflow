@@ -33,11 +33,15 @@ jobs:
 
       # Teste configure credentials
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1-node16
+        uses: aws-actions/configure-aws-credentials@v3
         with:
           role-to-assume: arn:aws:iam::$AWS_ACCOUNT_ID:role/${{ env.AWS_ASSUME_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
           role-session-name: $LAMBDA_NAME-role-session
+
+      - name:  Test list lambda functions
+        run: |
+          aws lambda list-functions
 
       # NPM INstall
       - name: Install all dependencies
