@@ -17,9 +17,10 @@ Rodará 2 jobs:
 
 A pipeline possui as seguintes variaveis de ambiente:
 
--  AWS_REGION: Região AWS.
--  BUCKET_CODE: Bucket onde o código será salvo.
--  BUCKET_STATE: Bucket que servirá como Backend para o terraform. Irá armazenar os arquivos de estado (terraform.tfstate) da infra.
+- AWS_REGION: Região AWS.
+- AWS_ASSUME_ROLE: ARN da role para execução da esteira.
+- BUCKET_CODE: Bucket onde o código será salvo.
+- BUCKET_STATE: Bucket que servirá como Backend para o terraform. Irá armazenar os arquivos de estado (terraform.tfstate) da infra.
 
 Todas as variáveis e secrets devem ser configuradas no repositório no GitHub.
 

@@ -14,7 +14,6 @@ env:
   AWS_REGION: ${{ vars.AWS_REGION }}
   BUCKET_CODE: ${{ vars.BUCKET_CODE }}
   BUCKET_STATE: ${{ vars.BUCKET_STATE }}
-  AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}
   AWS_ASSUME_ROLE: ${{ vars.AWS_ASSUME_ROLE }}
 
 jobs:
@@ -59,7 +58,8 @@ jobs:
 
     outputs:
       lambda_name: ${{ steps.ziping.outputs.lambda_name }}
-        
+  
+  # Infraestructure
   terraform:
     runs-on: ubuntu-latest
     needs: build
@@ -92,6 +92,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
       
+      # Crete backend file
       - name: Terraform set backend
         working-directory: infra
         run: |
@@ -104,13 +105,14 @@ jobs:
 
           cat backend.tf
 
+      # Terraform init config with bucket on S3
       - name: Terraform Init
         working-directory: infra
         run: |
           terraform init \
              -backend=true \
             -backend-config="bucket=$BUCKET_STATE" \
-            -backend-config="key=lambda-actions-workflow/terraform.tfstate" \
+            -backend-config="key=$LAMBDA_NAME/terraform.tfstate" \
             -backend-config="region=$AWS_REGION" 
 
       - name: Terraform Plan
