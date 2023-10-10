@@ -15,6 +15,7 @@ env:
   BUCKET_CODE: ${{ vars.BUCKET_CODE }}
   BUCKET_STATE: ${{ vars.BUCKET_STATE }}
   AWS_ASSUME_ROLE: ${{ vars.AWS_ASSUME_ROLE }}
+  REPOSITORY_NAME: ${{ github.event.repository.name }}
 
 jobs:
 
@@ -105,14 +106,14 @@ jobs:
 
           cat backend.tf
 
-      # Terraform init config with bucket on S3
+      # Terraform init config with bucket on S3 with the repo name
       - name: Terraform Init
         working-directory: infra
         run: |
           terraform init \
              -backend=true \
             -backend-config="bucket=$BUCKET_STATE" \
-            -backend-config="key=$LAMBDA_NAME/terraform.tfstate" \
+            -backend-config="key=$REPOSITORY_NAME/terraform.tfstate" \
             -backend-config="region=$AWS_REGION" 
 
       - name: Terraform Plan
